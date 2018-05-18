@@ -1,0 +1,475 @@
+I0917 00:07:25.472807 13811 caffe.cpp:275] Use GPU with device ID 0
+I0917 00:07:25.473187 13811 caffe.cpp:279] GPU device name: GeForce GTX TITAN Black
+I0917 00:07:25.618813 13811 net.cpp:294] The NetState phase (1) differed from the phase (0) specified by a rule in layer mnist
+I0917 00:07:25.618901 13811 net.cpp:51] Initializing net from parameters: 
+name: "LeNet"
+state {
+  phase: TEST
+  level: 0
+  stage: ""
+}
+layer {
+  name: "mnist"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "../examples/mnist/data/mnist_test_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 20
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 50
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "pool2"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 500
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "ip1"
+  top: "ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "ip2"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip2"
+  bottom: "label"
+  top: "loss"
+}
+I0917 00:07:25.618958 13811 layer_factory.hpp:77] Creating layer mnist
+I0917 00:07:25.639247 13811 db_lmdb.cpp:35] Opened lmdb ../examples/mnist/data/mnist_test_lmdb
+I0917 00:07:25.639271 13811 net.cpp:84] Creating Layer mnist
+I0917 00:07:25.639276 13811 net.cpp:380] mnist -> data
+I0917 00:07:25.639293 13811 net.cpp:380] mnist -> label
+I0917 00:07:25.648134 13811 data_layer.cpp:45] output data size: 100,1,28,28
+I0917 00:07:25.649494 13811 net.cpp:122] Setting up mnist
+I0917 00:07:25.649508 13811 net.cpp:129] Top shape: 100 1 28 28 (78400)
+I0917 00:07:25.649511 13811 net.cpp:129] Top shape: 100 (100)
+I0917 00:07:25.649513 13811 net.cpp:137] Memory required for data: 314000
+I0917 00:07:25.649520 13811 layer_factory.hpp:77] Creating layer label_mnist_1_split
+I0917 00:07:25.649531 13811 net.cpp:84] Creating Layer label_mnist_1_split
+I0917 00:07:25.649535 13811 net.cpp:406] label_mnist_1_split <- label
+I0917 00:07:25.649544 13811 net.cpp:380] label_mnist_1_split -> label_mnist_1_split_0
+I0917 00:07:25.649552 13811 net.cpp:380] label_mnist_1_split -> label_mnist_1_split_1
+I0917 00:07:25.649581 13811 net.cpp:122] Setting up label_mnist_1_split
+I0917 00:07:25.649587 13811 net.cpp:129] Top shape: 100 (100)
+I0917 00:07:25.649590 13811 net.cpp:129] Top shape: 100 (100)
+I0917 00:07:25.649591 13811 net.cpp:137] Memory required for data: 314800
+I0917 00:07:25.649595 13811 layer_factory.hpp:77] Creating layer conv1
+I0917 00:07:25.649605 13811 net.cpp:84] Creating Layer conv1
+I0917 00:07:25.649608 13811 net.cpp:406] conv1 <- data
+I0917 00:07:25.649612 13811 net.cpp:380] conv1 -> conv1
+I0917 00:07:25.751814 13811 net.cpp:122] Setting up conv1
+I0917 00:07:25.751845 13811 net.cpp:129] Top shape: 100 20 24 24 (1152000)
+I0917 00:07:25.751862 13811 net.cpp:137] Memory required for data: 4922800
+I0917 00:07:25.751879 13811 layer_factory.hpp:77] Creating layer pool1
+I0917 00:07:25.751888 13811 net.cpp:84] Creating Layer pool1
+I0917 00:07:25.751890 13811 net.cpp:406] pool1 <- conv1
+I0917 00:07:25.751895 13811 net.cpp:380] pool1 -> pool1
+I0917 00:07:25.751926 13811 net.cpp:122] Setting up pool1
+I0917 00:07:25.751931 13811 net.cpp:129] Top shape: 100 20 12 12 (288000)
+I0917 00:07:25.751933 13811 net.cpp:137] Memory required for data: 6074800
+I0917 00:07:25.751936 13811 layer_factory.hpp:77] Creating layer conv2
+I0917 00:07:25.751945 13811 net.cpp:84] Creating Layer conv2
+I0917 00:07:25.751947 13811 net.cpp:406] conv2 <- pool1
+I0917 00:07:25.751950 13811 net.cpp:380] conv2 -> conv2
+I0917 00:07:25.753104 13811 net.cpp:122] Setting up conv2
+I0917 00:07:25.753114 13811 net.cpp:129] Top shape: 100 50 8 8 (320000)
+I0917 00:07:25.753118 13811 net.cpp:137] Memory required for data: 7354800
+I0917 00:07:25.753123 13811 layer_factory.hpp:77] Creating layer pool2
+I0917 00:07:25.753127 13811 net.cpp:84] Creating Layer pool2
+I0917 00:07:25.753130 13811 net.cpp:406] pool2 <- conv2
+I0917 00:07:25.753134 13811 net.cpp:380] pool2 -> pool2
+I0917 00:07:25.753156 13811 net.cpp:122] Setting up pool2
+I0917 00:07:25.753160 13811 net.cpp:129] Top shape: 100 50 4 4 (80000)
+I0917 00:07:25.753162 13811 net.cpp:137] Memory required for data: 7674800
+I0917 00:07:25.753165 13811 layer_factory.hpp:77] Creating layer ip1
+I0917 00:07:25.753170 13811 net.cpp:84] Creating Layer ip1
+I0917 00:07:25.753172 13811 net.cpp:406] ip1 <- pool2
+I0917 00:07:25.753177 13811 net.cpp:380] ip1 -> ip1
+I0917 00:07:25.754957 13811 net.cpp:122] Setting up ip1
+I0917 00:07:25.754966 13811 net.cpp:129] Top shape: 100 500 (50000)
+I0917 00:07:25.754968 13811 net.cpp:137] Memory required for data: 7874800
+I0917 00:07:25.754973 13811 layer_factory.hpp:77] Creating layer relu1
+I0917 00:07:25.754977 13811 net.cpp:84] Creating Layer relu1
+I0917 00:07:25.754981 13811 net.cpp:406] relu1 <- ip1
+I0917 00:07:25.754983 13811 net.cpp:367] relu1 -> ip1 (in-place)
+I0917 00:07:25.755281 13811 net.cpp:122] Setting up relu1
+I0917 00:07:25.755290 13811 net.cpp:129] Top shape: 100 500 (50000)
+I0917 00:07:25.755291 13811 net.cpp:137] Memory required for data: 8074800
+I0917 00:07:25.755295 13811 layer_factory.hpp:77] Creating layer ip2
+I0917 00:07:25.755300 13811 net.cpp:84] Creating Layer ip2
+I0917 00:07:25.755302 13811 net.cpp:406] ip2 <- ip1
+I0917 00:07:25.755308 13811 net.cpp:380] ip2 -> ip2
+I0917 00:07:25.755623 13811 net.cpp:122] Setting up ip2
+I0917 00:07:25.755630 13811 net.cpp:129] Top shape: 100 10 (1000)
+I0917 00:07:25.755632 13811 net.cpp:137] Memory required for data: 8078800
+I0917 00:07:25.755636 13811 layer_factory.hpp:77] Creating layer ip2_ip2_0_split
+I0917 00:07:25.755640 13811 net.cpp:84] Creating Layer ip2_ip2_0_split
+I0917 00:07:25.755643 13811 net.cpp:406] ip2_ip2_0_split <- ip2
+I0917 00:07:25.755647 13811 net.cpp:380] ip2_ip2_0_split -> ip2_ip2_0_split_0
+I0917 00:07:25.755652 13811 net.cpp:380] ip2_ip2_0_split -> ip2_ip2_0_split_1
+I0917 00:07:25.755672 13811 net.cpp:122] Setting up ip2_ip2_0_split
+I0917 00:07:25.755676 13811 net.cpp:129] Top shape: 100 10 (1000)
+I0917 00:07:25.755678 13811 net.cpp:129] Top shape: 100 10 (1000)
+I0917 00:07:25.755681 13811 net.cpp:137] Memory required for data: 8086800
+I0917 00:07:25.755682 13811 layer_factory.hpp:77] Creating layer accuracy
+I0917 00:07:25.755687 13811 net.cpp:84] Creating Layer accuracy
+I0917 00:07:25.755690 13811 net.cpp:406] accuracy <- ip2_ip2_0_split_0
+I0917 00:07:25.755692 13811 net.cpp:406] accuracy <- label_mnist_1_split_0
+I0917 00:07:25.755697 13811 net.cpp:380] accuracy -> accuracy
+I0917 00:07:25.755702 13811 net.cpp:122] Setting up accuracy
+I0917 00:07:25.755704 13811 net.cpp:129] Top shape: (1)
+I0917 00:07:25.755707 13811 net.cpp:137] Memory required for data: 8086804
+I0917 00:07:25.755708 13811 layer_factory.hpp:77] Creating layer loss
+I0917 00:07:25.755712 13811 net.cpp:84] Creating Layer loss
+I0917 00:07:25.755718 13811 net.cpp:406] loss <- ip2_ip2_0_split_1
+I0917 00:07:25.755725 13811 net.cpp:406] loss <- label_mnist_1_split_1
+I0917 00:07:25.755729 13811 net.cpp:380] loss -> loss
+I0917 00:07:25.755735 13811 layer_factory.hpp:77] Creating layer loss
+I0917 00:07:25.755887 13811 net.cpp:122] Setting up loss
+I0917 00:07:25.755893 13811 net.cpp:129] Top shape: (1)
+I0917 00:07:25.755895 13811 net.cpp:132]     with loss weight 1
+I0917 00:07:25.755908 13811 net.cpp:137] Memory required for data: 8086808
+I0917 00:07:25.755909 13811 net.cpp:198] loss needs backward computation.
+I0917 00:07:25.755914 13811 net.cpp:200] accuracy does not need backward computation.
+I0917 00:07:25.755918 13811 net.cpp:198] ip2_ip2_0_split needs backward computation.
+I0917 00:07:25.755919 13811 net.cpp:198] ip2 needs backward computation.
+I0917 00:07:25.755921 13811 net.cpp:198] relu1 needs backward computation.
+I0917 00:07:25.755923 13811 net.cpp:198] ip1 needs backward computation.
+I0917 00:07:25.755925 13811 net.cpp:198] pool2 needs backward computation.
+I0917 00:07:25.755928 13811 net.cpp:198] conv2 needs backward computation.
+I0917 00:07:25.755930 13811 net.cpp:198] pool1 needs backward computation.
+I0917 00:07:25.755933 13811 net.cpp:198] conv1 needs backward computation.
+I0917 00:07:25.755935 13811 net.cpp:200] label_mnist_1_split does not need backward computation.
+I0917 00:07:25.755937 13811 net.cpp:200] mnist does not need backward computation.
+I0917 00:07:25.755939 13811 net.cpp:242] This network produces output accuracy
+I0917 00:07:25.755942 13811 net.cpp:242] This network produces output loss
+I0917 00:07:25.755950 13811 net.cpp:255] Network initialization done.
+I0917 00:07:25.757319 13811 caffe.cpp:290] Running for 100 iterations.
+I0917 00:07:25.760519 13811 caffe.cpp:313] Batch 0, accuracy = 0.99
+I0917 00:07:25.760532 13811 caffe.cpp:313] Batch 0, loss = 0.0179172
+I0917 00:07:25.761688 13811 caffe.cpp:313] Batch 1, accuracy = 1
+I0917 00:07:25.761699 13811 caffe.cpp:313] Batch 1, loss = 0.0112168
+I0917 00:07:25.762871 13811 caffe.cpp:313] Batch 2, accuracy = 0.99
+I0917 00:07:25.762881 13811 caffe.cpp:313] Batch 2, loss = 0.0183664
+I0917 00:07:25.764011 13811 caffe.cpp:313] Batch 3, accuracy = 1
+I0917 00:07:25.764020 13811 caffe.cpp:313] Batch 3, loss = 0.0086279
+I0917 00:07:25.765199 13811 caffe.cpp:313] Batch 4, accuracy = 0.98
+I0917 00:07:25.765209 13811 caffe.cpp:313] Batch 4, loss = 0.113345
+I0917 00:07:25.766357 13811 caffe.cpp:313] Batch 5, accuracy = 0.99
+I0917 00:07:25.766366 13811 caffe.cpp:313] Batch 5, loss = 0.0452979
+I0917 00:07:25.767510 13811 caffe.cpp:313] Batch 6, accuracy = 0.99
+I0917 00:07:25.767519 13811 caffe.cpp:313] Batch 6, loss = 0.0318173
+I0917 00:07:25.768692 13811 caffe.cpp:313] Batch 7, accuracy = 1
+I0917 00:07:25.768702 13811 caffe.cpp:313] Batch 7, loss = 0.00851064
+I0917 00:07:25.769862 13811 caffe.cpp:313] Batch 8, accuracy = 0.99
+I0917 00:07:25.769871 13811 caffe.cpp:313] Batch 8, loss = 0.0226217
+I0917 00:07:25.771051 13811 caffe.cpp:313] Batch 9, accuracy = 0.97
+I0917 00:07:25.771059 13811 caffe.cpp:313] Batch 9, loss = 0.0691719
+I0917 00:07:25.772217 13811 caffe.cpp:313] Batch 10, accuracy = 0.98
+I0917 00:07:25.772245 13811 caffe.cpp:313] Batch 10, loss = 0.0878516
+I0917 00:07:25.773380 13811 caffe.cpp:313] Batch 11, accuracy = 0.98
+I0917 00:07:25.773388 13811 caffe.cpp:313] Batch 11, loss = 0.0390269
+I0917 00:07:25.774538 13811 caffe.cpp:313] Batch 12, accuracy = 0.94
+I0917 00:07:25.774547 13811 caffe.cpp:313] Batch 12, loss = 0.123104
+I0917 00:07:25.775696 13811 caffe.cpp:313] Batch 13, accuracy = 0.99
+I0917 00:07:25.775705 13811 caffe.cpp:313] Batch 13, loss = 0.0459037
+I0917 00:07:25.776896 13811 caffe.cpp:313] Batch 14, accuracy = 1
+I0917 00:07:25.776906 13811 caffe.cpp:313] Batch 14, loss = 0.01455
+I0917 00:07:25.778055 13811 caffe.cpp:313] Batch 15, accuracy = 0.98
+I0917 00:07:25.778064 13811 caffe.cpp:313] Batch 15, loss = 0.0848627
+I0917 00:07:25.779223 13811 caffe.cpp:313] Batch 16, accuracy = 0.97
+I0917 00:07:25.779232 13811 caffe.cpp:313] Batch 16, loss = 0.051738
+I0917 00:07:25.780421 13811 caffe.cpp:313] Batch 17, accuracy = 0.99
+I0917 00:07:25.780434 13811 caffe.cpp:313] Batch 17, loss = 0.0284602
+I0917 00:07:25.781589 13811 caffe.cpp:313] Batch 18, accuracy = 0.99
+I0917 00:07:25.781595 13811 caffe.cpp:313] Batch 18, loss = 0.0203632
+I0917 00:07:25.782762 13811 caffe.cpp:313] Batch 19, accuracy = 0.98
+I0917 00:07:25.782770 13811 caffe.cpp:313] Batch 19, loss = 0.0478413
+I0917 00:07:25.783937 13811 caffe.cpp:313] Batch 20, accuracy = 0.97
+I0917 00:07:25.783946 13811 caffe.cpp:313] Batch 20, loss = 0.054761
+I0917 00:07:25.785106 13811 caffe.cpp:313] Batch 21, accuracy = 0.97
+I0917 00:07:25.785116 13811 caffe.cpp:313] Batch 21, loss = 0.103586
+I0917 00:07:25.786263 13811 caffe.cpp:313] Batch 22, accuracy = 0.98
+I0917 00:07:25.786273 13811 caffe.cpp:313] Batch 22, loss = 0.0326409
+I0917 00:07:25.787443 13811 caffe.cpp:313] Batch 23, accuracy = 0.99
+I0917 00:07:25.787451 13811 caffe.cpp:313] Batch 23, loss = 0.034786
+I0917 00:07:25.788610 13811 caffe.cpp:313] Batch 24, accuracy = 0.97
+I0917 00:07:25.788619 13811 caffe.cpp:313] Batch 24, loss = 0.0664482
+I0917 00:07:25.789785 13811 caffe.cpp:313] Batch 25, accuracy = 0.99
+I0917 00:07:25.789793 13811 caffe.cpp:313] Batch 25, loss = 0.0359935
+I0917 00:07:25.790949 13811 caffe.cpp:313] Batch 26, accuracy = 0.99
+I0917 00:07:25.790957 13811 caffe.cpp:313] Batch 26, loss = 0.0720391
+I0917 00:07:25.792116 13811 caffe.cpp:313] Batch 27, accuracy = 0.99
+I0917 00:07:25.792124 13811 caffe.cpp:313] Batch 27, loss = 0.0279267
+I0917 00:07:25.793324 13811 caffe.cpp:313] Batch 28, accuracy = 0.99
+I0917 00:07:25.793334 13811 caffe.cpp:313] Batch 28, loss = 0.0600318
+I0917 00:07:25.794500 13811 caffe.cpp:313] Batch 29, accuracy = 0.95
+I0917 00:07:25.794509 13811 caffe.cpp:313] Batch 29, loss = 0.1364
+I0917 00:07:25.795678 13811 caffe.cpp:313] Batch 30, accuracy = 0.98
+I0917 00:07:25.795687 13811 caffe.cpp:313] Batch 30, loss = 0.0475883
+I0917 00:07:25.796861 13811 caffe.cpp:313] Batch 31, accuracy = 1
+I0917 00:07:25.796870 13811 caffe.cpp:313] Batch 31, loss = 0.00704144
+I0917 00:07:25.798022 13811 caffe.cpp:313] Batch 32, accuracy = 0.99
+I0917 00:07:25.798030 13811 caffe.cpp:313] Batch 32, loss = 0.0183628
+I0917 00:07:25.799183 13811 caffe.cpp:313] Batch 33, accuracy = 1
+I0917 00:07:25.799191 13811 caffe.cpp:313] Batch 33, loss = 0.00533716
+I0917 00:07:25.800362 13811 caffe.cpp:313] Batch 34, accuracy = 0.99
+I0917 00:07:25.800370 13811 caffe.cpp:313] Batch 34, loss = 0.067618
+I0917 00:07:25.801538 13811 caffe.cpp:313] Batch 35, accuracy = 0.95
+I0917 00:07:25.801547 13811 caffe.cpp:313] Batch 35, loss = 0.172615
+I0917 00:07:25.802721 13811 caffe.cpp:313] Batch 36, accuracy = 1
+I0917 00:07:25.802729 13811 caffe.cpp:313] Batch 36, loss = 0.0098686
+I0917 00:07:25.803890 13811 caffe.cpp:313] Batch 37, accuracy = 0.98
+I0917 00:07:25.803900 13811 caffe.cpp:313] Batch 37, loss = 0.060933
+I0917 00:07:25.805060 13811 caffe.cpp:313] Batch 38, accuracy = 0.98
+I0917 00:07:25.805068 13811 caffe.cpp:313] Batch 38, loss = 0.0467239
+I0917 00:07:25.806227 13811 caffe.cpp:313] Batch 39, accuracy = 0.98
+I0917 00:07:25.806236 13811 caffe.cpp:313] Batch 39, loss = 0.0419753
+I0917 00:07:25.807417 13811 caffe.cpp:313] Batch 40, accuracy = 0.99
+I0917 00:07:25.807426 13811 caffe.cpp:313] Batch 40, loss = 0.0409329
+I0917 00:07:25.808593 13811 caffe.cpp:313] Batch 41, accuracy = 0.99
+I0917 00:07:25.808603 13811 caffe.cpp:313] Batch 41, loss = 0.0840259
+I0917 00:07:25.809810 13811 caffe.cpp:313] Batch 42, accuracy = 0.97
+I0917 00:07:25.809820 13811 caffe.cpp:313] Batch 42, loss = 0.0694746
+I0917 00:07:25.811028 13811 caffe.cpp:313] Batch 43, accuracy = 1
+I0917 00:07:25.811038 13811 caffe.cpp:313] Batch 43, loss = 0.0158435
+I0917 00:07:25.812189 13811 caffe.cpp:313] Batch 44, accuracy = 0.99
+I0917 00:07:25.812198 13811 caffe.cpp:313] Batch 44, loss = 0.0399486
+I0917 00:07:25.813392 13811 caffe.cpp:313] Batch 45, accuracy = 0.99
+I0917 00:07:25.813402 13811 caffe.cpp:313] Batch 45, loss = 0.0488916
+I0917 00:07:25.814574 13811 caffe.cpp:313] Batch 46, accuracy = 0.99
+I0917 00:07:25.814582 13811 caffe.cpp:313] Batch 46, loss = 0.0220156
+I0917 00:07:25.815738 13811 caffe.cpp:313] Batch 47, accuracy = 0.99
+I0917 00:07:25.815747 13811 caffe.cpp:313] Batch 47, loss = 0.0169264
+I0917 00:07:25.816912 13811 caffe.cpp:313] Batch 48, accuracy = 0.96
+I0917 00:07:25.816920 13811 caffe.cpp:313] Batch 48, loss = 0.0735375
+I0917 00:07:25.818087 13811 caffe.cpp:313] Batch 49, accuracy = 1
+I0917 00:07:25.818096 13811 caffe.cpp:313] Batch 49, loss = 0.00440836
+I0917 00:07:25.819273 13811 caffe.cpp:313] Batch 50, accuracy = 1
+I0917 00:07:25.819281 13811 caffe.cpp:313] Batch 50, loss = 0.00191522
+I0917 00:07:25.820432 13811 caffe.cpp:313] Batch 51, accuracy = 1
+I0917 00:07:25.820441 13811 caffe.cpp:313] Batch 51, loss = 0.00808254
+I0917 00:07:25.821600 13811 caffe.cpp:313] Batch 52, accuracy = 1
+I0917 00:07:25.821609 13811 caffe.cpp:313] Batch 52, loss = 0.00452688
+I0917 00:07:25.822777 13811 caffe.cpp:313] Batch 53, accuracy = 1
+I0917 00:07:25.822785 13811 caffe.cpp:313] Batch 53, loss = 0.00354887
+I0917 00:07:25.823951 13811 caffe.cpp:313] Batch 54, accuracy = 1
+I0917 00:07:25.823959 13811 caffe.cpp:313] Batch 54, loss = 0.00201543
+I0917 00:07:25.825124 13811 caffe.cpp:313] Batch 55, accuracy = 1
+I0917 00:07:25.825132 13811 caffe.cpp:313] Batch 55, loss = 0.00091153
+I0917 00:07:25.826297 13811 caffe.cpp:313] Batch 56, accuracy = 1
+I0917 00:07:25.826308 13811 caffe.cpp:313] Batch 56, loss = 0.0120321
+I0917 00:07:25.827460 13811 caffe.cpp:313] Batch 57, accuracy = 1
+I0917 00:07:25.827468 13811 caffe.cpp:313] Batch 57, loss = 0.0116798
+I0917 00:07:25.828647 13811 caffe.cpp:313] Batch 58, accuracy = 1
+I0917 00:07:25.828657 13811 caffe.cpp:313] Batch 58, loss = 0.00622444
+I0917 00:07:25.829816 13811 caffe.cpp:313] Batch 59, accuracy = 0.99
+I0917 00:07:25.829825 13811 caffe.cpp:313] Batch 59, loss = 0.0243298
+I0917 00:07:25.830983 13811 caffe.cpp:313] Batch 60, accuracy = 0.97
+I0917 00:07:25.830992 13811 caffe.cpp:313] Batch 60, loss = 0.029897
+I0917 00:07:25.832170 13811 caffe.cpp:313] Batch 61, accuracy = 1
+I0917 00:07:25.832178 13811 caffe.cpp:313] Batch 61, loss = 0.0046401
+I0917 00:07:25.833336 13811 caffe.cpp:313] Batch 62, accuracy = 1
+I0917 00:07:25.833344 13811 caffe.cpp:313] Batch 62, loss = 7.25438e-05
+I0917 00:07:25.834501 13811 caffe.cpp:313] Batch 63, accuracy = 1
+I0917 00:07:25.834508 13811 caffe.cpp:313] Batch 63, loss = 8.54546e-05
+I0917 00:07:25.835661 13811 caffe.cpp:313] Batch 64, accuracy = 1
+I0917 00:07:25.835669 13811 caffe.cpp:313] Batch 64, loss = 0.00137214
+I0917 00:07:25.836815 13811 caffe.cpp:313] Batch 65, accuracy = 0.97
+I0917 00:07:25.836824 13811 caffe.cpp:313] Batch 65, loss = 0.117874
+I0917 00:07:25.837980 13811 caffe.cpp:313] Batch 66, accuracy = 0.98
+I0917 00:07:25.837987 13811 caffe.cpp:313] Batch 66, loss = 0.0588504
+I0917 00:07:25.839103 13811 caffe.cpp:313] Batch 67, accuracy = 0.99
+I0917 00:07:25.839112 13811 caffe.cpp:313] Batch 67, loss = 0.0295705
+I0917 00:07:25.840245 13811 caffe.cpp:313] Batch 68, accuracy = 1
+I0917 00:07:25.840265 13811 caffe.cpp:313] Batch 68, loss = 0.00653407
+I0917 00:07:25.841377 13811 caffe.cpp:313] Batch 69, accuracy = 1
+I0917 00:07:25.841384 13811 caffe.cpp:313] Batch 69, loss = 0.00083669
+I0917 00:07:25.842510 13811 caffe.cpp:313] Batch 70, accuracy = 1
+I0917 00:07:25.842519 13811 caffe.cpp:313] Batch 70, loss = 0.000352224
+I0917 00:07:25.843767 13811 caffe.cpp:313] Batch 71, accuracy = 1
+I0917 00:07:25.843787 13811 caffe.cpp:313] Batch 71, loss = 0.000581929
+I0917 00:07:25.844980 13811 caffe.cpp:313] Batch 72, accuracy = 1
+I0917 00:07:25.844990 13811 caffe.cpp:313] Batch 72, loss = 0.0076576
+I0917 00:07:25.846166 13811 caffe.cpp:313] Batch 73, accuracy = 1
+I0917 00:07:25.846175 13811 caffe.cpp:313] Batch 73, loss = 0.000209029
+I0917 00:07:25.847324 13811 caffe.cpp:313] Batch 74, accuracy = 1
+I0917 00:07:25.847332 13811 caffe.cpp:313] Batch 74, loss = 0.00397366
+I0917 00:07:25.848489 13811 caffe.cpp:313] Batch 75, accuracy = 1
+I0917 00:07:25.848497 13811 caffe.cpp:313] Batch 75, loss = 0.0033454
+I0917 00:07:25.849655 13811 caffe.cpp:313] Batch 76, accuracy = 1
+I0917 00:07:25.849668 13811 caffe.cpp:313] Batch 76, loss = 0.000218041
+I0917 00:07:25.850819 13811 caffe.cpp:313] Batch 77, accuracy = 1
+I0917 00:07:25.850827 13811 caffe.cpp:313] Batch 77, loss = 0.000581915
+I0917 00:07:25.851971 13811 caffe.cpp:313] Batch 78, accuracy = 1
+I0917 00:07:25.851980 13811 caffe.cpp:313] Batch 78, loss = 0.00705854
+I0917 00:07:25.853157 13811 caffe.cpp:313] Batch 79, accuracy = 1
+I0917 00:07:25.853165 13811 caffe.cpp:313] Batch 79, loss = 0.00464272
+I0917 00:07:25.854329 13811 caffe.cpp:313] Batch 80, accuracy = 0.99
+I0917 00:07:25.854338 13811 caffe.cpp:313] Batch 80, loss = 0.00952255
+I0917 00:07:25.855505 13811 caffe.cpp:313] Batch 81, accuracy = 1
+I0917 00:07:25.855515 13811 caffe.cpp:313] Batch 81, loss = 0.0024247
+I0917 00:07:25.856657 13811 caffe.cpp:313] Batch 82, accuracy = 1
+I0917 00:07:25.856665 13811 caffe.cpp:313] Batch 82, loss = 0.00509647
+I0917 00:07:25.857811 13811 caffe.cpp:313] Batch 83, accuracy = 0.99
+I0917 00:07:25.857820 13811 caffe.cpp:313] Batch 83, loss = 0.0324278
+I0917 00:07:25.858986 13811 caffe.cpp:313] Batch 84, accuracy = 0.99
+I0917 00:07:25.858994 13811 caffe.cpp:313] Batch 84, loss = 0.0107671
+I0917 00:07:25.860167 13811 caffe.cpp:313] Batch 85, accuracy = 0.99
+I0917 00:07:25.860177 13811 caffe.cpp:313] Batch 85, loss = 0.0488848
+I0917 00:07:25.861335 13811 caffe.cpp:313] Batch 86, accuracy = 1
+I0917 00:07:25.861344 13811 caffe.cpp:313] Batch 86, loss = 0.0006081
+I0917 00:07:25.862514 13811 caffe.cpp:313] Batch 87, accuracy = 1
+I0917 00:07:25.862524 13811 caffe.cpp:313] Batch 87, loss = 0.000113568
+I0917 00:07:25.863682 13811 caffe.cpp:313] Batch 88, accuracy = 1
+I0917 00:07:25.863690 13811 caffe.cpp:313] Batch 88, loss = 4.81135e-05
+I0917 00:07:25.864837 13811 caffe.cpp:313] Batch 89, accuracy = 1
+I0917 00:07:25.864846 13811 caffe.cpp:313] Batch 89, loss = 0.000187624
+I0917 00:07:25.866013 13811 caffe.cpp:313] Batch 90, accuracy = 0.97
+I0917 00:07:25.866020 13811 caffe.cpp:313] Batch 90, loss = 0.074801
+I0917 00:07:25.867166 13811 caffe.cpp:313] Batch 91, accuracy = 1
+I0917 00:07:25.867175 13811 caffe.cpp:313] Batch 91, loss = 0.000194954
+I0917 00:07:25.868361 13811 caffe.cpp:313] Batch 92, accuracy = 0.99
+I0917 00:07:25.868371 13811 caffe.cpp:313] Batch 92, loss = 0.010918
+I0917 00:07:25.869525 13811 caffe.cpp:313] Batch 93, accuracy = 0.99
+I0917 00:07:25.869534 13811 caffe.cpp:313] Batch 93, loss = 0.0115084
+I0917 00:07:25.870689 13811 caffe.cpp:313] Batch 94, accuracy = 1
+I0917 00:07:25.870697 13811 caffe.cpp:313] Batch 94, loss = 0.000363358
+I0917 00:07:25.871886 13811 caffe.cpp:313] Batch 95, accuracy = 1
+I0917 00:07:25.871896 13811 caffe.cpp:313] Batch 95, loss = 0.00488516
+I0917 00:07:25.873059 13811 caffe.cpp:313] Batch 96, accuracy = 0.97
+I0917 00:07:25.873067 13811 caffe.cpp:313] Batch 96, loss = 0.0515147
+I0917 00:07:25.873199 13816 data_layer.cpp:73] Restarting data prefetching from start.
+I0917 00:07:25.874218 13811 caffe.cpp:313] Batch 97, accuracy = 0.99
+I0917 00:07:25.874228 13811 caffe.cpp:313] Batch 97, loss = 0.0480978
+I0917 00:07:25.875361 13811 caffe.cpp:313] Batch 98, accuracy = 1
+I0917 00:07:25.875370 13811 caffe.cpp:313] Batch 98, loss = 0.00824651
+I0917 00:07:25.876680 13811 caffe.cpp:313] Batch 99, accuracy = 0.99
+I0917 00:07:25.876693 13811 caffe.cpp:313] Batch 99, loss = 0.0162533
+I0917 00:07:25.876696 13811 caffe.cpp:318] Loss: 0.0309976
+I0917 00:07:25.876713 13811 caffe.cpp:330] accuracy = 0.9897
+I0917 00:07:25.876720 13811 caffe.cpp:330] loss = 0.0309976 (* 1 = 0.0309976 loss)
